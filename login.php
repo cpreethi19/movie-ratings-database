@@ -56,6 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
+                            echo "verified password";
                             session_start();
 
                             // Store data in session variables
@@ -65,6 +66,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                             // Redirect user to welcome page
                             header("location: welcome.php");
+
                         } else{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid username or password.";
@@ -81,6 +83,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Close statement
             mysqli_stmt_close($stmt);
         }
+        else{
+            echo "Oops! Something went wrong. Please try again later.";
+        }
+    }
+    else{
+        echo "there were erros";
     }
 
     // Close connection
