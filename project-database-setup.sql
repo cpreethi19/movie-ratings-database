@@ -7,7 +7,6 @@
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -111,7 +110,7 @@ INSERT INTO `Actor` (`Name`, `Gender`, `Birthday`) VALUES
 --
 
 CREATE TABLE `Creates` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `ReviewID` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -120,8 +119,8 @@ CREATE TABLE `Creates` (
 --
 
 INSERT INTO `Creates` (`UserID`, `ReviewID`) VALUES
-('12345', '101'),
-('23456', '102');
+(1, '101'),
+(2, '102');
 
 -- --------------------------------------------------------
 
@@ -244,8 +243,7 @@ CREATE TABLE `friends` (
 --
 
 INSERT INTO `friends` (`Name`, `Gender`, `Birthday`) VALUES
-('Preethi', 'Female', '4/4/2002'),
-('Vaidik', 'Male', '4/3/2002');
+('Preethi', 'Female', '4/4/2002');
 
 -- --------------------------------------------------------
 
@@ -254,7 +252,7 @@ INSERT INTO `friends` (`Name`, `Gender`, `Birthday`) VALUES
 --
 
 CREATE TABLE `FriendsWith` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `FriendsID` varchar(10) NOT NULL,
   `Friends_since` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -264,8 +262,7 @@ CREATE TABLE `FriendsWith` (
 --
 
 INSERT INTO `FriendsWith` (`UserID`, `FriendsID`, `Friends_since`) VALUES
-('12345', '23456', '10/19/2022'),
-('12345', '34567', '10/19/2022');
+(1, '2', '10/19/2022');
 
 -- --------------------------------------------------------
 
@@ -293,7 +290,7 @@ INSERT INTO `Has` (`ReviewID`, `MovieName`) VALUES
 --
 
 CREATE TABLE `IsIn` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `MovieName` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -302,9 +299,9 @@ CREATE TABLE `IsIn` (
 --
 
 INSERT INTO `IsIn` (`UserID`, `MovieName`) VALUES
-('12345', 'Black Panther'),
-('12345', 'Cinderella'),
-('23456', 'Thor');
+(1, 'Black Panther'),
+(1, 'Cinderella'),
+(2, 'Thor');
 
 -- --------------------------------------------------------
 
@@ -370,7 +367,7 @@ INSERT INTO `Movie` (`name`, `Release_Date`, `Genre`) VALUES
 --
 
 CREATE TABLE `Owns` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `WatchListID` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -379,7 +376,7 @@ CREATE TABLE `Owns` (
 --
 
 INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
-('12345', '999');
+(1, '999');
 
 -- --------------------------------------------------------
 
@@ -462,7 +459,7 @@ INSERT INTO `Produces` (`StudioName`, `MovieName`, `ReleaseDate`) VALUES
 --
 
 CREATE TABLE `rating_changes` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `old_rating` int(11) NOT NULL,
   `new_rating` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -478,7 +475,7 @@ CREATE TABLE `Reviews` (
   `Title` varchar(30) NOT NULL,
   `Description` varchar(30) NOT NULL,
   `Created_At` varchar(30) NOT NULL,
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL,
   `year` int(11) NOT NULL,
   `rating` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -488,16 +485,16 @@ CREATE TABLE `Reviews` (
 --
 
 INSERT INTO `Reviews` (`ID`, `Title`, `Description`, `Created_At`, `UserID`, `year`, `rating`) VALUES
-('101', 'Test Review', 'Just testing', '10/19/2022', '12345', 2022, 88),
-('102', 'Test Review 2', 'Just testing 2', '10/19/2022', '23456', 2022, 87);
+('101', 'Test Review', 'Just testing', '10/19/2022', 1, 2022, 88),
+('102', 'Test Review 2', 'Just testing 2', '10/19/2022', 2, 2022, 87);
 
 --
 -- Triggers `Reviews`
 --
 DELIMITER $$
 CREATE TRIGGER `before_update_rating` BEFORE UPDATE ON `Reviews` FOR EACH ROW BEGIN 
-    	IF New.rating <> OLD.rating THEN
-        	INSERT INTO rating_changes(UserID, old_rating, new_rating)
+      IF New.rating <> OLD.rating THEN
+          INSERT INTO rating_changes(UserID, old_rating, new_rating)
             
             VALUES(OLD.UserID, OLD.rating, NEW.rating);
         END IF;
@@ -620,7 +617,7 @@ INSERT INTO `studio` (`StudioName`, `Address`) VALUES
 --
 
 CREATE TABLE `users` (
-  `UserID` varchar(10) NOT NULL,
+  `UserID` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `Name` varchar(30) NOT NULL,
   `Birthday` varchar(10) NOT NULL,
   `username` varchar(50) NOT NULL,
@@ -631,11 +628,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`UserID`, `Name`, `Birthday`, `username`, `password`) VALUES
-('12345', 'Mitchell', '4/15/2002', '', ''),
-('23456', 'Preethi', '4/4/2002', '', ''),
-('34567', 'Vaidik', '4/3/2002', '', ''),
-('45678', 'Josh', '4/2/2002', '', '');
+INSERT INTO `users` (`Name`, `Birthday`, `username`, `password`) VALUES
+('Mitchell', '4/15/2002', 'Mitchell', 'password'),
+('Preethi', '4/4/2002', 'Preethi', 'password');
 
 --
 -- Indexes for dumped tables
@@ -744,12 +739,6 @@ ALTER TABLE `StarsIn`
 --
 ALTER TABLE `studio`
   ADD PRIMARY KEY (`StudioName`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`UserID`);
 
 --
 -- Constraints for dumped tables
