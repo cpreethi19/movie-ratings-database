@@ -229,44 +229,6 @@ INSERT INTO `Films` (`MovieName`, `Director`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `friends`
---
-
-CREATE TABLE `friends` (
-  `Name` varchar(30) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `Birthday` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `friends`
---
-
-INSERT INTO `friends` (`Name`, `Gender`, `Birthday`) VALUES
-('Preethi', 'Female', '4/4/2002');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `FriendsWith`
---
-
-CREATE TABLE `FriendsWith` (
-  `UserID` INT NOT NULL,
-  `FriendsID` varchar(10) NOT NULL,
-  `Friends_since` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `FriendsWith`
---
-
-INSERT INTO `FriendsWith` (`UserID`, `FriendsID`, `Friends_since`) VALUES
-(1, '2', '10/19/2022');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `Has`
 --
 
@@ -290,7 +252,7 @@ INSERT INTO `Has` (`ReviewID`, `MovieName`) VALUES
 --
 
 CREATE TABLE `IsIn` (
-  `UserID` INT NOT NULL,
+  `WatchListID` INT NOT NULL,
   `MovieName` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -298,10 +260,10 @@ CREATE TABLE `IsIn` (
 -- Dumping data for table `IsIn`
 --
 
-INSERT INTO `IsIn` (`UserID`, `MovieName`) VALUES
-(1, 'Black Panther'),
-(1, 'Cinderella'),
-(2, 'Thor');
+INSERT INTO `IsIn` (`WatchListID`, `MovieName`) VALUES
+(999, 'Black Panther'),
+(999, 'Cinderella'),
+(999, 'Thor');
 
 -- --------------------------------------------------------
 
@@ -368,7 +330,7 @@ INSERT INTO `Movie` (`name`, `Release_Date`, `Genre`) VALUES
 
 CREATE TABLE `Owns` (
   `UserID` INT NOT NULL,
-  `WatchListID` varchar(10) NOT NULL
+  `WatchListID` INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -376,7 +338,7 @@ CREATE TABLE `Owns` (
 --
 
 INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
-(1, '999');
+(1, 999);
 
 -- --------------------------------------------------------
 
@@ -385,7 +347,8 @@ INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
 --
 
 CREATE TABLE `PersonalWatchList` (
-  `WatchListID` varchar(10) NOT NULL
+  `WatchListID` INT NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -393,7 +356,7 @@ CREATE TABLE `PersonalWatchList` (
 --
 
 INSERT INTO `PersonalWatchList` (`WatchListID`) VALUES
-('999');
+(999);
 
 -- --------------------------------------------------------
 
@@ -492,10 +455,10 @@ INSERT INTO `Reviews` (`ID`, `Title`, `Description`, `Created_At`, `UserID`, `ye
 -- Triggers `Reviews`
 --
 DELIMITER $$
-CREATE TRIGGER `before_update_rating` BEFORE UPDATE ON `Reviews` FOR EACH ROW BEGIN 
+CREATE TRIGGER `before_update_rating` BEFORE UPDATE ON `Reviews` FOR EACH ROW BEGIN
       IF New.rating <> OLD.rating THEN
           INSERT INTO rating_changes(UserID, old_rating, new_rating)
-            
+
             VALUES(OLD.UserID, OLD.rating, NEW.rating);
         END IF;
     END
@@ -663,18 +626,6 @@ ALTER TABLE `Films`
   ADD KEY `Director` (`Director`);
 
 --
--- Indexes for table `friends`
---
-ALTER TABLE `friends`
-  ADD PRIMARY KEY (`Name`);
-
---
--- Indexes for table `FriendsWith`
---
-ALTER TABLE `FriendsWith`
-  ADD PRIMARY KEY (`UserID`,`FriendsID`);
-
---
 -- Indexes for table `Has`
 --
 ALTER TABLE `Has`
@@ -685,7 +636,7 @@ ALTER TABLE `Has`
 -- Indexes for table `IsIn`
 --
 ALTER TABLE `IsIn`
-  ADD PRIMARY KEY (`UserID`,`MovieName`),
+  ADD PRIMARY KEY (`WatchListID`,`MovieName`),
   ADD KEY `MovieName` (`MovieName`);
 
 --
@@ -759,12 +710,6 @@ ALTER TABLE `Films`
   ADD CONSTRAINT `Films_ibfk_2` FOREIGN KEY (`Director`) REFERENCES `Director` (`Name`);
 
 --
--- Constraints for table `FriendsWith`
---
-ALTER TABLE `FriendsWith`
-  ADD CONSTRAINT `FriendsWith_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
-
---
 -- Constraints for table `Has`
 --
 ALTER TABLE `Has`
@@ -775,7 +720,7 @@ ALTER TABLE `Has`
 -- Constraints for table `IsIn`
 --
 ALTER TABLE `IsIn`
-  ADD CONSTRAINT `IsIn_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
+  ADD CONSTRAINT `IsIn_ibfk_1` FOREIGN KEY (`WatchListID`) REFERENCES `PersonalWatchList` (`WatchListID`),
   ADD CONSTRAINT `IsIn_ibfk_2` FOREIGN KEY (`MovieName`) REFERENCES `Movie` (`name`);
 
 --
