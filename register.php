@@ -3,8 +3,8 @@
 require_once "project-db.php";
  
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username = $password = $confirm_password = $name = $birthday = "";
+$username_err = $password_err = $confirm_password_err = $name_err = $birthday_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else{
         // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = ?";
+        $sql = "SELECT UserID FROM users WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -43,6 +43,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             mysqli_stmt_close($stmt);
         }
     }
+
+    // Validate name
+    if(empty(trim($_POST["name"]))){
+        $name_err = "Please enter your name.";     
+    } else{
+        $name = trim($_POST["name"]);
+    }
+
+    // Validate birthday
+    if(empty(trim($_POST["birthday"]))){
+        $birthday_err = "Please enter a birthday.";     
+    } else{
+        $birthday = trim($_POST["birthday"]);
+    }
     
     // Validate password
     if(empty(trim($_POST["password"]))){
@@ -64,16 +78,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
+    if(empty($name_err) && empty($birthday_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (Name, Birthday, username, password) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_Name, $param_Birthday, $param_username, $param_password);
             
             // Set parameters
+            $param_Name = $name;
+            $param_Birthday = $birthday;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
@@ -82,7 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Redirect to login page
                 header("location: login.php");
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Oops! Something went wrong with this account. Please try again later.";
             }
 
             // Close statement
@@ -111,6 +127,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
+                <span class="invalid-feedback"><?php echo $name_err; ?></span>
+            </div>  
+            <div class="form-group">
+                <label>Birthday</label>
+                <input type="text" name="birthday" class="form-control <?php echo (!empty($birthday_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $birthday; ?>">
+                <span class="invalid-feedback"><?php echo $birthday_err; ?></span>
+            </div>  
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
