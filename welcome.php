@@ -17,10 +17,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
         $result = mysqli_query($link, $sql);
 
         $UserID = $_SESSION["id"];
-        $sql2 = "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList";
-        $result = mysqli_query($link, $sql2);
-        $sql3 = "INSERT INTO Owns VALUES ($UserID, mysqli_fetch_row($result)[0])";
-        $result2 = mysqli_query($link, $sql3);
+        $sql2 = "INSERT INTO Owns VALUES ($UserID,SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList)";
+        $result2 = mysqli_query($link, $sql2);
         mysqli_close($link);
     }
 }
