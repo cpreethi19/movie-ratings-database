@@ -107,12 +107,12 @@ mysqli_close($link);
     <th width="30%">Movie Name</th>
     <th width="30%">Release Date</th>
     <th width="30%">Genre</th>
-    <th>Add Movie?</th>
+    <th>Add Movie to Watch List?</th>
   </tr>
   </thead>
 <?php foreach ($list_of_movies as $movie_info): ?>
   <tr>
-     <td><?php echo $movie_info['name']; ?></td>
+     <td><a class="nav-item nav-link active" href="movie-data.php?movie_name=<?php echo $movie_info['name'] ?>"><?php echo $movie_info['name']; ?></a></td>
      <td><?php echo $movie_info['Release_Date']; ?></td>
      <td><?php echo $movie_info['Genre']; ?></td>
      <td><form action="watchlist.php" method="post">

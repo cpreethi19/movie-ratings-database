@@ -338,7 +338,7 @@ CREATE TABLE `Owns` (
 --
 
 INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
-(1, 999);
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -347,7 +347,7 @@ INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
 --
 
 CREATE TABLE `PersonalWatchList` (
-  `WatchListID` INT NOT NULL AUTO_INCREMENT,
+  `WatchListID` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -356,7 +356,7 @@ CREATE TABLE `PersonalWatchList` (
 --
 
 INSERT INTO `PersonalWatchList` (`WatchListID`) VALUES
-(1);
+('Mitchell Watchlist');
 
 -- --------------------------------------------------------
 
@@ -651,12 +651,6 @@ ALTER TABLE `Movie`
 ALTER TABLE `Owns`
   ADD PRIMARY KEY (`UserID`,`WatchListID`),
   ADD KEY `WatchListID` (`WatchListID`);
-
---
--- Indexes for table `PersonalWatchList`
---
-ALTER TABLE `PersonalWatchList`
-  ADD PRIMARY KEY (`WatchListID`);
 
 --
 -- Indexes for table `Produces`
