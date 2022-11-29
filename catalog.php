@@ -92,6 +92,7 @@ if($result = mysqli_query($link, $sql)){
                 echo "<td>" . $row['name'] . "</td>";
                 echo "<td>" . $row['Release_Date'] . "</td>";
                 echo "<td>" . $row['Genre'] . "</td>";
+                echo <td> <input type="button" value="Add to Watch List!" onclick="location='catalog.php'" /> </td>;
             echo "</tr>";
         }
         echo "</table>";
