@@ -65,7 +65,7 @@ require("catalog-display.php");
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home <span class="sr-only"></span></a>
+            <a class="nav-item nav-link active" href="welcome.php">Home <span class="sr-only"></span></a>
             <a class="nav-item nav-link active" href="catalog.php">Movie Catalog</a>
             <a class="nav-item nav-link active" href="#">Your Movie List</a>
         </div>
@@ -78,6 +78,12 @@ require("catalog-display.php");
 
 
 <?php
+if ($_SERVER['REQUEST_METHOD']=='POST'){
+    if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add')){
+    addMovie($_POST['name'], $_POST['major'], $_POST['year']);
+    $list_of_friends = getAllFriends();
+    }
+}
 $sql = "SELECT name, Release_Date, Genre FROM Movie";
 $result = mysqli_query($link, $sql);
 $list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);

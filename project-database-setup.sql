@@ -261,9 +261,9 @@ CREATE TABLE `IsIn` (
 --
 
 INSERT INTO `IsIn` (`WatchListID`, `MovieName`) VALUES
-(999, 'Black Panther'),
-(999, 'Cinderella'),
-(999, 'Thor');
+(1, 'Black Panther'),
+(1, 'Cinderella'),
+(1, 'Thor');
 
 -- --------------------------------------------------------
 
@@ -347,7 +347,7 @@ INSERT INTO `Owns` (`UserID`, `WatchListID`) VALUES
 --
 
 CREATE TABLE `PersonalWatchList` (
-  `WatchListID` INT NOT NULL,
+  `WatchListID` INT NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -356,7 +356,7 @@ CREATE TABLE `PersonalWatchList` (
 --
 
 INSERT INTO `PersonalWatchList` (`WatchListID`) VALUES
-(999);
+(1);
 
 -- --------------------------------------------------------
 

@@ -12,4 +12,8 @@ function getAllMovies()
 	return $return;
 }
 
+function addMovie() {
+	
+}
+
 ?>
