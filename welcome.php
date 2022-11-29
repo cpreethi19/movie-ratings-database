@@ -63,9 +63,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
 
     <body>
     <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
-    <p>
-        <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
-    </p>
     <div>
     <h1 class="my-5">Create a New Watch List! </h1>
         <FORM method="post">
@@ -77,7 +74,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
         </FORM>
     </div>
     </body>
-
+    <p>
+        <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+    </p>
 
     <!-- Code from footer reference-->
     <footer class="mt-auto bg-light text-center text-lg-start">
