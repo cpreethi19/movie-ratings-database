@@ -7,6 +7,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
+if ($_SERVER['REQUEST_METHOD']=='POST'){
+    if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
+    addPersonalWatchList($_SESSION['UserID'], $_POST['']);
+    $list_of_friends = getAllFriends();
+    }
+}
 ?>
 
 
@@ -49,6 +55,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <p>
         <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
     </p>
+    <div>
+    <h1 class="my-5">Create a New Watch List! </h1>
+        <FORM>
+        <INPUT TYPE="Text" Size="25" Value="Watch List Name" title="Watch List Name">
+        <P>
+        <INPUT TYPE="Submit" Value="CREATE">
+        </FORM>
+    </div>
     </body>
 
 
