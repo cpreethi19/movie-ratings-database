@@ -1,7 +1,7 @@
 <?php
 // Include config file
 require_once "project-db.php";
-
+require("catalog-display.php");
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = $name = $birthday = "";
 $username_err = $password_err = $confirm_password_err = $name_err = $birthday_err = "";
@@ -54,8 +54,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate birthday
     if(empty(trim($_POST["birthday"]))){
         $birthday_err = "Please enter a birthday.";
-    }elseif (strlen((trim($_POST["birthday"])) != 10)) {
+    }elseif (strlen(trim($_POST["birthday"])) < 10 || strlen(trim($_POST["birthday"])) > 10)  {
         $birthday_err = "Please enter with format: DD/MM/YYYY ";
+        echo strlen(trim($_POST["birthday"]));
     }
     else{
         $birthday = trim($_POST["birthday"]);

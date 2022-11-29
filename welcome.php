@@ -1,4 +1,7 @@
 <?php
+require("catalog-display.php");
+require_once "project-db.php";
+$watchListName = null;
 // Initialize the session
 session_start();
 
@@ -6,6 +9,20 @@ session_start();
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
+}
+if ($_SERVER['REQUEST_METHOD']=='POST'){
+    if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
+        $MovieName = $_POST['watchList'];
+        $sql = "INSERT INTO PersonalWatchList VALUES ($MovieName)";
+        $result = mysqli_query($link, $sql);
+
+        $UserID = $_SESSION["id"];
+        $sql2 = "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList";
+        $result = mysqli_query($link, $sql2);
+        $sql3 = "INSERT INTO Owns VALUES ($UserID, mysqli_fetch_row($result)[0])";
+        $result2 = mysqli_query($link, $sql3);
+        mysqli_close($link);
+    }
 }
 ?>
 
@@ -37,9 +54,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home <span class="sr-only"></span></a>
+            <a class="nav-item nav-link active" href="welcome.php">Home <span class="sr-only"></span></a>
             <a class="nav-item nav-link active" href="catalog.php">Movie Catalog</a>
-            <a class="nav-item nav-link active" href="#">Your Movie List</a>
+            <a class="nav-item nav-link active" href="watchlist.php">Your Movie List</a>
         </div>
         </div>
     </nav>
@@ -49,6 +66,16 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <p>
         <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
     </p>
+    <div>
+    <h1 class="my-5">Create a New Watch List! </h1>
+        <FORM method="post">
+            Watch List Name:
+            <P>
+        <INPUT TYPE="Text" Size="25" name = "watchList">
+        <P>
+        <INPUT TYPE="Submit" Value="CREATE" name="btnAction">
+        </FORM>
+    </div>
     </body>
 
 
