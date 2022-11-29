@@ -1,4 +1,6 @@
 <?php
+require("catalog-display.php");
+$watchListName = null;
 // Initialize the session
 session_start();
 
@@ -9,8 +11,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
-    addPersonalWatchList($_SESSION['UserID'], $_POST['']);
-    $list_of_friends = getAllFriends();
+    addPersonalWatchList($_SESSION['id'], $_POST['watchList']); //into watch list
+    addPersonalWatchListOwns($_SESSION['id']); //owns
     }
 }
 ?>
@@ -57,10 +59,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     </p>
     <div>
     <h1 class="my-5">Create a New Watch List! </h1>
-        <FORM>
-        <INPUT TYPE="Text" Size="25" Value="Watch List Name" title="Watch List Name">
+        <FORM method="post">
+            Watch List Name:
+            <P>
+        <INPUT TYPE="Text" Size="25" name = "watchList">
         <P>
-        <INPUT TYPE="Submit" Value="CREATE">
+        <INPUT TYPE="Submit" Value="CREATE" name="btnAction">
         </FORM>
     </div>
     </body>
