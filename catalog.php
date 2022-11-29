@@ -2,6 +2,7 @@
 // Include config file
 require_once "project-db.php";
 require("catalog-display.php");
+session_start();
 ?>
 
 <!-- 1. create HTML5 doctype -->
@@ -67,7 +68,7 @@ require("catalog-display.php");
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="welcome.php">Home <span class="sr-only"></span></a>
             <a class="nav-item nav-link active" href="catalog.php">Movie Catalog</a>
-            <a class="nav-item nav-link active" href="#">Your Movie List</a>
+            <a class="nav-item nav-link active" href="watchlist.php">Your Movie List</a>
         </div>
         </div>
     </nav>
@@ -80,8 +81,14 @@ require("catalog-display.php");
 <?php
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add')){
-    addMovie($_POST['name'], $_POST['major'], $_POST['year']);
-    $list_of_friends = getAllFriends();
+    echo "Success";
+    $UserID = $_SESSION["id"];
+    $MovieName = $_POST['movie_to_add'];
+    $sql = "SELECT WatchListID FROM owns WHERE UserID = $UserID";
+    $result = mysqli_query($link, $sql);
+    $sql2 = "INSERT INTO IsIn VALUES (mysqli_fetch_row($result)[0], $MovieName)";
+    $result2 = mysqli_query($link, $sql);
+    mysqli_close($link);
     }
 }
 $sql = "SELECT name, Release_Date, Genre FROM Movie";
@@ -108,7 +115,7 @@ mysqli_close($link);
      <td><?php echo $movie_info['name']; ?></td>
      <td><?php echo $movie_info['Release_Date']; ?></td>
      <td><?php echo $movie_info['Genre']; ?></td>
-     <td><form action="simpleform.php" method="post">
+     <td><form action="watchlist.php" method="post">
           <input type="submit" value="Add" name="btnAction" class="btn btn-primary" title="Add Movie to Watch List"/>
           <input type="hidden" name="movie_to_add" value="<?php echo $movie_info['name']; ?>"/>
         </form>

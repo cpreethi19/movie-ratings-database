@@ -1,5 +1,6 @@
 <?php
 require("catalog-display.php");
+require_once "project-db.php";
 $watchListName = null;
 // Initialize the session
 session_start();
@@ -11,8 +12,16 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
-    addPersonalWatchList($_SESSION['id'], $_POST['watchList']); //into watch list
-    addPersonalWatchListOwns($_SESSION['id']); //owns
+        $MovieName = $_POST['watchList'];
+        $sql = "INSERT INTO PersonalWatchList VALUES ($MovieName)";
+        $result = mysqli_query($link, $sql);
+
+        $UserID = $_SESSION["id"];
+        $sql2 = "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList";
+        $result = mysqli_query($link, $sql2);
+        $sql3 = "INSERT INTO Owns VALUES ($UserID, mysqli_fetch_row($result)[0])";
+        $result2 = mysqli_query($link, $sql3);
+        mysqli_close($link);
     }
 }
 ?>
@@ -47,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
         <div class="navbar-nav">
             <a class="nav-item nav-link active" href="welcome.php">Home <span class="sr-only"></span></a>
             <a class="nav-item nav-link active" href="catalog.php">Movie Catalog</a>
-            <a class="nav-item nav-link active" href="#">Your Movie List</a>
+            <a class="nav-item nav-link active" href="watchlist.php">Your Movie List</a>
         </div>
         </div>
     </nav>
