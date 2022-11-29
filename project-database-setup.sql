@@ -560,8 +560,8 @@ INSERT INTO `StarsIn` (`MovieName`, `ActorName`) VALUES
 --
 
 CREATE TABLE `studio` (
-  `StudioName` varchar(50) NOT NULL,
-  `Address` varchar(50) NOT NULL
+  `StudioName` varchar(100) NOT NULL,
+  `Address` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
