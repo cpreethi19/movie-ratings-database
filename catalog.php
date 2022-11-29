@@ -87,30 +87,30 @@ mysqli_close($link);
 ?>
 
 <h3>List of Movies</h3>
-<div class="row justify-content-center">  
+<div class="row justify-content-center">
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
-    <th width="30%">Movie Name</th>        
-    <th width="30%">Release Date</th>       
+    <th width="30%">Movie Name</th>
+    <th width="30%">Release Date</th>
     <th width="30%">Genre</th>
-    <th>Update?</th>
+    <th>Add Movie?</th>
   </tr>
   </thead>
 <?php foreach ($list_of_movies as $movie_info): ?>
-  <tr> 
+  <tr>
      <td><?php echo $movie_info['name']; ?></td>
-     <td><?php echo $movie_info['Release_Date']; ?></td>        
-     <td><?php echo $movie_info['Genre']; ?></td>    
+     <td><?php echo $movie_info['Release_Date']; ?></td>
+     <td><?php echo $movie_info['Genre']; ?></td>
      <td><form action="simpleform.php" method="post">
-          <input type="submit" value="Update" name="btnAction" class="btn btn-primary" title="Click to update this friend"/>
-          <input type="hidden" name="friend_to_update" value="<?php echo $friend_info['name']; ?>"/>
+          <input type="submit" value="Add" name="btnAction" class="btn btn-primary" title="Add Movie to Watch List"/>
+          <input type="hidden" name="movie_to_add" value="<?php echo $movie_info['name']; ?>"/>
         </form>
-    </td>          
+    </td>
   </tr>
 <?php endforeach; ?>
 </table>
-</div> 
+</div>
 
 
 
