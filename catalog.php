@@ -72,11 +72,19 @@ session_start();
         </div>
         </div>
     </nav>
+    <style>
+        #search {
+            border:5px solid #CCC;
+        }
+    </style>
 
 </head>
 
 <body>
-
+<form align="left" id="search" action="catalog.php" method="GET">
+  <input type="text" name="query" />
+  <input type="submit" value="Search" />
+</form>
 
 <?php
 if ($_SERVER['REQUEST_METHOD']=='POST'){
@@ -91,10 +99,20 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     mysqli_close($link);
     }
 }
-$sql = "SELECT name, Release_Date, Genre FROM Movie";
+$sql = "SELECT * FROM Movie";
 $result = mysqli_query($link, $sql);
 $list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
+if (!empty($_GET['query']))
+  {
+    $query = $_GET['query'];
+    // makes sure nobody uses SQL injection
+    $sql = "SELECT * FROM Movie
+      WHERE (`name` LIKE '%".$query."%') OR (`Genre` LIKE '%".$query."%')";
+    $result = mysqli_query($link, $sql);
+    $list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result);
+  }
 // Close connection
 mysqli_close($link);
 ?>
