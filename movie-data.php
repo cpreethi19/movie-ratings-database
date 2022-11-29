@@ -1,19 +1,53 @@
 <?php
 require_once "project-db.php";
 $movie_name = $_GET['movie_name'];
-//echo $var_value;
 ?>
 
 <?php 
+$name = $gender = $birthday = "";
+$name_err = $gender_err = $birthday_err = "";
+
 if ($_SERVER['REQUEST_METHOD']=='POST')
 {
-  if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add'))
+  if(empty(trim($_POST["name"]))){
+        $name_err = "Please enter the actor name.";
+    } else{
+        $name = trim($_POST["name"]);
+    }
+  if(empty(trim($_POST["gender"]))){
+        $gender_err = "Please enter the actor gender.";
+    } else{
+        $gender = trim($_POST["gender"]);
+    }
+  if(empty(trim($_POST["birthday"]))){
+        $birthday_err = "Please enter the actor birthday.";
+    } else{
+        $birthday = trim($_POST["birthday"]);
+    }
+
+  if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add') && empty($name_err) && empty($gender_err) && empty($birthday_err))
   {
     //addFriend($_POST['name'], $_POST['major'], $_POST['year']);
-    $sql_actors = "SELECT * FROM StarsIn S NATURAL JOIN Actor A WHERE S.MovieName = $movie_name";
-    $result = mysqli_query($link, $sql_actors);
-    $list_of_actors = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    mysqli_free_result($result);
+    $sql = "INSERT INTO Actor (Name, Gender, Birthday VALUES (?, ?, ?)";
+    if($stmt = mysqli_prepare($link, $sql)){
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "sss", $param_Name, $param_Gender, $param_Birthday);
+
+        // Set parameters
+        $param_Name = $name;
+        $param_Gender = $gender;
+        $param_Birthday = $birthday;
+        $movie = $_POST['movie_to_update'];
+
+        if(mysqli_stmt_execute($stmt)){
+          // Update display table
+
+        } else{
+            echo "Oops! Something went wrong with this account. Please try again later.";
+        }
+        mysqli_stmt_close($stmt);
+    }
+  //mysqli_close($link);
   }
 }
 ?>
@@ -127,15 +161,7 @@ mysqli_stmt_execute($stmt_studio);
 mysqli_stmt_store_result($stmt_studio);
 mysqli_stmt_bind_result($stmt_studio, $studio_address);
 mysqli_stmt_fetch($stmt_studio);
-echo $studio_address;
 
-$sql_actors = "SELECT * FROM StarsIn S NATURAL JOIN Actor A WHERE S.MovieName = $movie_name";
-$result = mysqli_query($link, $sql_actors);
-$list_of_actors = mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_free_result($result);
-
-//Close connection
-mysqli_close($link);
 ?> 
 <h3 align="left">Director Information</h3>
 <h6 align="left">Name: <?php echo $director_name; ?></h6>
@@ -147,24 +173,37 @@ mysqli_close($link);
 <h6 align="left">Studio Address: <?php echo $studio_address; ?></h6>
 
 <h3 align="left">Lead Actors' Information</h3>
-<div class="row justify-content-center">  
-<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-  <thead>
-  <tr style="background-color:#B0B0B0">
-    <th width="30%">Name</th>        
-    <th width="30%">Gender</th>       
-    <th width="30%">Birthday</th> 
-  </tr>
-  </thead>
-<?php foreach ($list_of_actors as $actor_info): ?>
-  <tr> 
-     <td><?php echo $actor_info['Name']; ?></td>
-     <td><?php echo $actor_info['Gender']; ?></td>        
-     <td><?php echo $actor_info['Birthday']; ?></td>              
-  </tr>
-<?php endforeach; ?>
-</table>
-</div> 
+<?php
+// Attempt select query execution
+$sql = "SELECT * FROM StarsIn S JOIN Actor A WHERE S.ActorName = A.Name AND S.MovieName = '$movie_name'";
+if(empty($_POST['btnAction']) && $result = mysqli_query($link, $sql)){
+    if(mysqli_num_rows($result) > 0){
+        echo "<table>";
+            echo "<tr>";
+                echo "<th>Name</th>";
+                echo "<th>Gender</th>";
+                echo "<th>Birthday</th>";
+            echo "</tr>";
+        while($row = mysqli_fetch_array($result)){
+            echo "<tr>";
+                echo "<td>" . $row['Name'] . "</td>";
+                echo "<td>" . $row['Gender'] . "</td>";
+                echo "<td>" . $row['Birthday'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        // Close result set
+        mysqli_free_result($result);
+    } else{
+        echo "No records matching your query were found.";
+    }
+} else{
+    echo "ERROR: Could not execute lead actors statement: $sql. " . mysqli_error($link);
+}
+ 
+// Close connection
+mysqli_close($link);
+?>
 
 <h5>Add Actor</h5>
 <form name="mainForm" action="movie-data.php" method="post">   
@@ -184,7 +223,8 @@ mysqli_close($link);
   <div>
     <input type="submit" value="Add" name="btnAction" class="btn btn-dark" 
            title="Insert an actor into the actor table" />         
-  </div>  
+  </div> 
+  <input type="hidden" name="movie_to_update" value="<?php echo $movie_name; ?>"/> 
 
 </form>   
 
