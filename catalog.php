@@ -79,37 +79,40 @@ require("catalog-display.php");
 
 <body>
 
-
-<?php 
+<?php
 $sql = "SELECT name, Release_Date, Genre FROM Movie";
-if($result = mysqli_query($link, $sql)){
-    if(mysqli_num_rows($result) > 0){
-        echo "<table>";
-            echo "<tr>";
-                echo "<th>Movie name</th>";
-                echo "<th>Release Date</th>";
-                echo "<th>Genre</th>";
-            echo "</tr>";
-        while($row = mysqli_fetch_array($result)){
-            echo "<tr>";
-                echo "<td>" . $row['name'] . "</td>";
-                echo "<td>" . $row['Release_Date'] . "</td>";
-                echo "<td>" . $row['Genre'] . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-        // Free result set
-        mysqli_free_result($result);
-    } else{
-        echo "No records matching your query were found.";
-    }
-} else{
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-}
- 
+$result = mysqli_query($link, $sql);
+$list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
+mysqli_free_result($result);
 // Close connection
 mysqli_close($link);
 ?>
+
+<h3>List of Movies</h3>
+<div class="row justify-content-center">  
+<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
+  <thead>
+  <tr style="background-color:#B0B0B0">
+    <th width="30%">Movie Name</th>        
+    <th width="30%">Release Date</th>       
+    <th width="30%">Genre</th>
+    <th>Update?</th>
+  </tr>
+  </thead>
+<?php foreach ($list_of_movies as $movie_info): ?>
+  <tr> 
+     <td><?php echo $movie_info['name']; ?></td>
+     <td><?php echo $movie_info['Release_Date']; ?></td>        
+     <td><?php echo $movie_info['Genre']; ?></td>    
+     <td><form action="simpleform.php" method="post">
+          <input type="submit" value="Update" name="btnAction" class="btn btn-primary" title="Click to update this friend"/>
+          <input type="hidden" name="friend_to_update" value="<?php echo $friend_info['name']; ?>"/>
+        </form>
+    </td>          
+  </tr>
+<?php endforeach; ?>
+</table>
+</div> 
 
 
 
