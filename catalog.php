@@ -91,9 +91,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add')){
     $UserID = $_SESSION["id"];
     $MovieName = $_POST['movie_to_add'];
-    $sql = "INSERT INTO IsIn VALUES ((SELECT DISTINCT WatchListID FROM owns WHERE UserID = '$UserID'), '$MovieName')";
+    $sql = "INSERT INTO IsIn (WatchListID, MovieName) VALUES ((SELECT DISTINCT WatchListID FROM Owns WHERE UserID = '$UserID' LIMIT 1), '$MovieName')";
     $result = mysqli_query($link, $sql);
-    mysqli_close($link);
     }
 }
 $sql = "SELECT * FROM Movie";
@@ -130,7 +129,7 @@ mysqli_close($link);
      <td><a class="nav-item nav-link active" href="movie-data.php?movie_name=<?php echo $movie_info['name'] ?>"><?php echo $movie_info['name']; ?></a></td>
      <td><?php echo $movie_info['Release_Date']; ?></td>
      <td><?php echo $movie_info['Genre']; ?></td>
-     <td><form action="watchlist.php" method="post">
+     <td><form action="catalog.php" method="post">
           <input type="submit" value="Add" name="btnAction" class="btn btn-primary" title="Add Movie to Watch List"/>
           <input type="hidden" name="movie_to_add" value="<?php echo $movie_info['name']; ?>"/>
         </form>
@@ -150,6 +149,32 @@ mysqli_close($link);
   <!-- for local -->
   <!-- <script src="your-js-file.js"></script> -->
 
-</div>
+</body>
+    <!-- Code from footer reference-->
+    <footer class="mt-auto bg-light text-center text-lg-start">
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!--Grid row-->
+            <div class="row">
+            <!--Grid column-->
+                <div class="text-center">
+                <h5 class="text-uppercase">Movie Database</h5>
+                <p>
+                    This is our Movie Database!!!
+                </p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright:
+        <a class="text-dark" >Movie Cataloging App</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
 </body>
 </html>
