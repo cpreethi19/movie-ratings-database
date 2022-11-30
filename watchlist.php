@@ -81,6 +81,17 @@ $result = mysqli_query($link, $sql);
 $list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
 // Close connection
+$action = ( array_key_exists( 'btnAction', $_POST) ? $_POST['btnAction'] : "" );
+if ($action!="" && !empty($_POST["btnAction"] && $_POST["btnAction"]=='Delete'))
+  {
+    //deleteFriend($_POST['friend_to_delete']);
+    $movie_name = $_POST['movie_to_delete'];
+    $sql_delete = "DELETE FROM IsIn WHERE MovieName = '$movie_name' AND WatchListID = (SELECT DISTINCT WatchListID FROM Owns WHERE UserID = '$UserID' LIMIT 1)";
+    $result_delete = mysqli_query($link, $sql_delete);
+    $sql = "SELECT MovieName FROM IsIn WHERE WatchListID = (SELECT DISTINCT WatchListID FROM Owns WHERE UserID = '$UserID' LIMIT 1)";
+    $result = mysqli_query($link, $sql);
+    $list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  }
 mysqli_close($link);
 ?>
 
@@ -90,6 +101,7 @@ mysqli_close($link);
   <thead>
   <tr style="background-color:#B0B0B0">
     <th width="30%">Movie Name</th>
+    <th>Delete?</th> 
   </tr>
   </thead>
 <?php $i=0;
@@ -98,6 +110,11 @@ mysqli_close($link);
    $rowcolor=($i%2==0?'#FCEDDA':'#e8a2b299');?>
   <tr style="background-color: <?php echo $rowcolor;?>;">
      <td><a class="nav-item nav-link active" href="movie-data.php?movie_name=<?php echo $movie_info['MovieName'] ?>"><?php echo $movie_info['MovieName']; ?></a></td>
+     <td><form action="watchlist.php" method="post">
+          <input type="submit" value="Delete" name="btnAction" class="btn btn-danger" title="Click to delete this friend"/>
+          <input type="hidden" name="movie_to_delete" value="<?php echo $movie_info['MovieName']; ?>"/>
+        </form>
+    </td> 
   </tr>
 <?php endforeach; ?>
 </table>
