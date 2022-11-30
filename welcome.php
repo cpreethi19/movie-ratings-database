@@ -12,12 +12,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
-        $MovieName = $_POST['watchList'];
-        $sql = "INSERT INTO PersonalWatchList VALUES ('$MovieName')";
+        $watchListName = $_POST['watchList'];
+        $sql = "INSERT INTO PersonalWatchList (name) VALUES ('$watchListName')";
         $result = mysqli_query($link, $sql);
 
         $UserID = $_SESSION["id"];
-        $sql2 = "INSERT INTO Owns VALUES ('$UserID',(SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList))";
+        $sql2 = "INSERT INTO Owns (UserID, WatchListID) VALUES ('$UserID',(SELECT WatchListID FROM PersonalWatchList ORDER BY WatchListID DESC LIMIT 1))";
         $result2 = mysqli_query($link, $sql2);
         mysqli_close($link);
     }
@@ -84,9 +84,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
             <div class="row">
             <!--Grid column-->
                 <div class="text-center">
-                <h5 class="text-uppercase">Temporary Footer</h5>
+                <h5 class="text-uppercase">Movie Database</h5>
                 <p>
-                    Temporary Footer Text
+                    This is our Movie Database!!!
                 </p>
                 </div>
                 <!--Grid column-->
