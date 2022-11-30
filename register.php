@@ -107,6 +107,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Close statement
             mysqli_stmt_close($stmt);
         }
+        
+        mysql_query("GRANT SELECT, INSERT, UPDATE, DELETE ON $link TO '$username'@'localhost'");
     }
 
     // Close connection

@@ -4,6 +4,20 @@ require_once "project-db.php";
 $watchListName = null;
 // Initialize the session
 session_start();
+$UserID = $_SESSION["id"];
+
+$sql = "SELECT username FROM users WHERE UserID = ?";
+$stmt = mysqli_prepare($link, $sql);
+mysqli_stmt_bind_param($stmt, "s", $param_ID);
+$param_ID = $UserID;
+if(mysqli_stmt_execute($stmt)){
+  mysqli_stmt_store_result($stmt);
+  mysqli_stmt_bind_result($stmt, $session_username);
+  mysqli_stmt_fetch($stmt);
+}
+else{
+  echo "ERROR: Could not execute lead actors statement: $sql. " . mysqli_error($link);
+}
 
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
@@ -16,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
         $sql = "INSERT INTO PersonalWatchList (name) VALUES ('$watchListName')";
         $result = mysqli_query($link, $sql);
 
-        $UserID = $_SESSION["id"];
         $sql2 = "INSERT INTO Owns (UserID, WatchListID) VALUES ('$UserID',(SELECT WatchListID FROM PersonalWatchList ORDER BY WatchListID DESC LIMIT 1))";
         $result2 = mysqli_query($link, $sql2);
         mysqli_close($link);
@@ -60,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     </nav>
 
     <body>
-    <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
+    <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($session_username); ?></b>. Welcome to our site.</h1>
     <div>
-    <h1 class="my-5">Create a new watch list! </h1>
+    <h1 class="my-5">Create a new movie watch list! </h1>
         <FORM method="post">
             <h5><b>Watch List Name:</b></h5>
             <P>
@@ -72,6 +85,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
         </FORM>
     </div>
     </body>
+    <p>
+        <a href="update.php?user_id=<?php echo $_SESSION["id"] ?>" class="btn btn-primary ml-3" style="position:relative; right:6px;">Update Your Info</a>
+    </p>
     <p>
         <a href="logout.php" class="btn btn-danger ml-3" style="position:relative; right:6px;">Sign Out of Your Account</a>
     </p>
