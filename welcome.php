@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     <div>
     <h1 class="my-5">Create a New Watch List! </h1>
         <FORM method="post">
-            <b>Watch List Name:</b>
+            <h5><b>Watch List Name:</b></h5>
             <P>
         <INPUT TYPE="Text" Size="25" name = "watchList">
         <P>
@@ -78,21 +78,6 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
 
     <!-- Code from footer reference-->
     <footer class="mt-auto bg-light text-center text-lg-start">
-        <!-- Grid container -->
-        <div class="container p-4">
-            <!--Grid row-->
-            <div class="row">
-            <!--Grid column-->
-                <div class="text-center">
-                <h5 class="text-uppercase">Movie Database</h5>
-                <p>
-                    This is our Movie Database!!!
-                </p>
-                </div>
-                <!--Grid column-->
-            </div>
-            <!--Grid row-->
-        </div>
         <!-- Grid container -->
 
         <!-- Copyright -->
