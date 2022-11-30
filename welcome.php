@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     <body>
     <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
     <div>
-    <h1 class="my-5">Create a New Watch List! </h1>
+    <h1 class="my-5">Create a new watch list! </h1>
         <FORM method="post">
             <h5><b>Watch List Name:</b></h5>
             <P>

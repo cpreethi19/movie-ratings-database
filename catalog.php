@@ -155,23 +155,6 @@ foreach ($list_of_movies as $movie_info):
 </body>
     <!-- Code from footer reference-->
     <footer class="mt-auto bg-light text-center text-lg-start">
-        <!-- Grid container -->
-        <div class="container p-4">
-            <!--Grid row-->
-            <div class="row">
-            <!--Grid column-->
-                <div class="text-center">
-                <h5 class="text-uppercase">Movie Database</h5>
-                <p>
-                    This is our Movie Database!!!
-                </p>
-                </div>
-                <!--Grid column-->
-            </div>
-            <!--Grid row-->
-        </div>
-        <!-- Grid container -->
-
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
         © 2022 Copyright:
