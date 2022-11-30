@@ -3,55 +3,6 @@ require_once "project-db.php";
 $movie_name = $_GET['movie_name'];
 ?>
 
-<?php 
-$name = $gender = $birthday = "";
-$name_err = $gender_err = $birthday_err = "";
-
-if ($_SERVER['REQUEST_METHOD']=='POST')
-{
-  if(empty(trim($_POST["name"]))){
-        $name_err = "Please enter the actor name.";
-    } else{
-        $name = trim($_POST["name"]);
-    }
-  if(empty(trim($_POST["gender"]))){
-        $gender_err = "Please enter the actor gender.";
-    } else{
-        $gender = trim($_POST["gender"]);
-    }
-  if(empty(trim($_POST["birthday"]))){
-        $birthday_err = "Please enter the actor birthday.";
-    } else{
-        $birthday = trim($_POST["birthday"]);
-    }
-
-  if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add') && empty($name_err) && empty($gender_err) && empty($birthday_err))
-  {
-    //addFriend($_POST['name'], $_POST['major'], $_POST['year']);
-    $sql = "INSERT INTO Actor (Name, Gender, Birthday VALUES (?, ?, ?)";
-    if($stmt = mysqli_prepare($link, $sql)){
-        // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "sss", $param_Name, $param_Gender, $param_Birthday);
-
-        // Set parameters
-        $param_Name = $name;
-        $param_Gender = $gender;
-        $param_Birthday = $birthday;
-        $movie = $_POST['movie_to_update'];
-
-        if(mysqli_stmt_execute($stmt)){
-          // Update display table
-
-        } else{
-            echo "Oops! Something went wrong with this account. Please try again later.";
-        }
-        mysqli_stmt_close($stmt);
-    }
-  //mysqli_close($link);
-  }
-}
-?>
-
 <!-- 1. create HTML5 doctype -->
 <!DOCTYPE html>
 <html>
@@ -203,30 +154,7 @@ if(empty($_POST['btnAction']) && $result = mysqli_query($link, $sql)){
  
 // Close connection
 mysqli_close($link);
-?>
-
-<h5>Add Actor</h5>
-<form name="mainForm" action="movie-data.php" method="post">   
-  <div class="row mb-3 mx-3">
-    Name:
-    <input type="text" class="form-control" name="name"/>            
-  </div>  
-  <div class="row mb-3 mx-3">
-    Gender:
-    <input type="text" class="form-control" name="gender"/>            
-  </div> 
-  <div class="row mb-3 mx-3">
-    Birthday:
-    <input type="text" class="form-control" name="birthday"/>            
-  </div>   
-  <!-- <div class="row mb-3 mx-3">     -->
-  <div>
-    <input type="submit" value="Add" name="btnAction" class="btn btn-dark" 
-           title="Insert an actor into the actor table" />         
-  </div> 
-  <input type="hidden" name="movie_to_update" value="<?php echo $movie_name; ?>"/> 
-
-</form>   
+?>   
 
 
 </body>
