@@ -3,12 +3,10 @@ require_once "project-db.php";
 require("catalog-display.php");
 session_start();
 $UserID = $_SESSION["id"];
-$sql = "SELECT WatchListID FROM owns WHERE UserID = $UserID";
+$sql = "SELECT MovieName FROM IsIn WHERE WatchListID = (SELECT DISTINCT WatchListID FROM owns WHERE UserID = '$UserID')";
 $result = mysqli_query($link, $sql);
-$sql2 = "SELECT MovieName FROM IsIn WHERE WatchListID = (mysqli_fetch_row($result)[0])";
-$result2 = mysqli_query($link, $sql2);
-$list_of_movies = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-mysqli_free_result($result2);
+$list_of_movies = mysqli_fetch_all($result, MYSQLI_ASSOC);
+mysqli_free_result($result);
 // Close connection
 mysqli_close($link);
 ?>
