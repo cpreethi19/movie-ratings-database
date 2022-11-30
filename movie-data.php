@@ -74,8 +74,8 @@ $movie_name = $_GET['movie_name'];
 </head>
 
 <h1><?php echo $movie_name; ?></h1>
-<div class="row justify-content-center"> 
-</div> 
+<div class="row justify-content-center">
+</div>
 <?php
 $sql_director = "SELECT Director FROM Films WHERE MovieName = ?";
 $stmt_director = mysqli_prepare($link, $sql_director);
@@ -113,23 +113,36 @@ mysqli_stmt_store_result($stmt_studio);
 mysqli_stmt_bind_result($stmt_studio, $studio_address);
 mysqli_stmt_fetch($stmt_studio);
 
-?> 
-<h3 align="left">Director Information</h3>
-<h6 align="left">Name: <?php echo $director_name; ?></h6>
-<h6 align="left">Gender: <?php echo $director_gender; ?></h6>
-<h6 align="left">Birthday: <?php echo $director_birthday; ?></h6>
+?>
+<div style="background-color: #FFFFFF99">
+  <h3 align="left">Director Information</h3>
+  <h6 align="left">Name: <?php echo $director_name; ?></h6>
+  <h6 align="left">Gender: <?php echo $director_gender; ?></h6>
+  <h6 align="left">Birthday: <?php echo $director_birthday; ?></h6>
 
-<h3 align="left">Producer Information</h3>
-<h6 align="left">Studio Name: <?php echo $studio_name; ?></h6>
-<h6 align="left">Studio Address: <?php echo $studio_address; ?></h6>
+  <h3 align="left">Producer Information</h3>
+  <h6 align="left">Studio Name: <?php echo $studio_name; ?></h6>
+  <h6 align="left">Studio Address: <?php echo $studio_address; ?></h6>
 
-<h3 align="left">Lead Actors' Information</h3>
+  <h3 align="left">Lead Actors' Information</h3>
+  <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  </style>
 <?php
 // Attempt select query execution
 $sql = "SELECT * FROM StarsIn S JOIN Actor A WHERE S.ActorName = A.Name AND S.MovieName = '$movie_name'";
 if(empty($_POST['btnAction']) && $result = mysqli_query($link, $sql)){
     if(mysqli_num_rows($result) > 0){
-        echo "<table>";
+        echo "<table style=\"position:relative; left:10px;\">";
             echo "<tr>";
                 echo "<th>Name</th>";
                 echo "<th>Gender</th>";
@@ -151,10 +164,12 @@ if(empty($_POST['btnAction']) && $result = mysqli_query($link, $sql)){
 } else{
     echo "ERROR: Could not execute lead actors statement: $sql. " . mysqli_error($link);
 }
- 
+
 // Close connection
 mysqli_close($link);
-?>   
+?>
+<br>
+</div>
 
 
 </body>
