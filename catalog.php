@@ -89,10 +89,9 @@ session_start();
 <?php
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='Add')){
-    echo "Success";
     $UserID = $_SESSION["id"];
     $MovieName = $_POST['movie_to_add'];
-    $sql = "INSERT INTO IsIn VALUES (SELECT DISTINCT WatchListID FROM owns WHERE UserID = $UserID, $MovieName)";
+    $sql = "INSERT INTO IsIn VALUES ((SELECT DISTINCT WatchListID FROM owns WHERE UserID = '$UserID'), '$MovieName')";
     $result = mysqli_query($link, $sql);
     mysqli_close($link);
     }

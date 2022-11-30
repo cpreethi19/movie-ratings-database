@@ -13,11 +13,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 if ($_SERVER['REQUEST_METHOD']=='POST'){
     if (!empty($_POST['btnAction'] && $_POST['btnAction']=='CREATE')){
         $MovieName = $_POST['watchList'];
-        $sql = "INSERT INTO PersonalWatchList VALUES ($MovieName)";
+        $sql = "INSERT INTO PersonalWatchList VALUES ('$MovieName')";
         $result = mysqli_query($link, $sql);
 
         $UserID = $_SESSION["id"];
-        $sql2 = "INSERT INTO Owns VALUES ($UserID,SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList)";
+        $sql2 = "INSERT INTO Owns VALUES ('$UserID',(SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = pkc7dbu_b AND TABLE_NAME = PersonalWatchList))";
         $result2 = mysqli_query($link, $sql2);
         mysqli_close($link);
     }
