@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     <div>
     <h1 class="my-5">Create a New Watch List! </h1>
         <FORM method="post">
-            Watch List Name:
+            <b>Watch List Name:</b>
             <P>
         <INPUT TYPE="Text" Size="25" name = "watchList">
         <P>
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST'){
     </div>
     </body>
     <p>
-        <a href="logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+        <a href="logout.php" class="btn btn-danger ml-3" style="position:relative; right:6px;">Sign Out of Your Account</a>
     </p>
 
     <!-- Code from footer reference-->

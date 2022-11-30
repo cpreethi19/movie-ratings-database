@@ -124,8 +124,11 @@ mysqli_close($link);
     <th>Add Movie to Watch List?</th>
   </tr>
   </thead>
-<?php foreach ($list_of_movies as $movie_info): ?>
-  <tr>
+<?php $i=0;
+foreach ($list_of_movies as $movie_info):
+  $i++;
+  $rowcolor=($i%2==0?'#FCEDDA':'#e8a2b299');?>
+  <tr style="background-color: <?php echo $rowcolor;?>;">
      <td><a class="nav-item nav-link active" href="movie-data.php?movie_name=<?php echo $movie_info['name'] ?>"><?php echo $movie_info['name']; ?></a></td>
      <td><?php echo $movie_info['Release_Date']; ?></td>
      <td><?php echo $movie_info['Genre']; ?></td>
